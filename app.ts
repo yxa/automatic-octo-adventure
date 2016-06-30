@@ -35,16 +35,14 @@ function skuValidator(control: Control): { [s: string]: boolean } {
 class Registration {
   name: string;
   email: string;
-  organizationNumber: number;
-  numberOfEmployees: number;
-  typeOfOrganization: string;
+  organization: string;
+  organizationType: string;
   
   constructor(obj?: any) {
     this.name                   = obj && obj.name                   || null;
     this.email                  = obj && obj.email                  || null;
-    this.organizationNumber     = obj && obj.organizationNumber     || null;
-    this.numberOfEmployees      = obj && obj.numberOfEmployees      || null;
-    this.typeOfOrganization     = obj && obj.typeOfOrganization     || null;
+    this.organization           = obj && obj.organization           || null;
+    this.organizationType       = obj && obj.organizationType       || null;
   }
 }
 
@@ -65,14 +63,12 @@ class Registration {
         <input type="text" id="email" placeholder="SKU" [ngFormControl]="email">
         
         <label for="organizationNumber">OrganizationNumber</label>
-        <input type="text" id="organizationNumber" placeholder="SKU" [ngFormControl]="organizationNumber">
-        
-        <label for="numberOfEmployees">NumberOfEmployees</label>
-        <input type="number" id="numberOfEmployees" placeholder="SKU" [ngFormControl]="numberOfEmployees">
+        <input type="text" id="organizationNumber" placeholder="SKU" [ngFormControl]="organization">
+       
         
         <label for="typeOfOrganization">TypeOfOrganization</label>
-        <select [ngFormControl]="typeOfOrganization" id="typeOfOrganization">
-           <option *ngFor="let organizationType of organizationTypes; let i = index" [selected]="i == 0">{{organizationType}}</option>
+        <select [ngFormControl]="organizationType" id="typeOfOrganization">
+           <option *ngFor="let type of organizationTypes; let i = index" [selected]="i == 0">{{type}}</option>
         </select>
       </div>
       <button type="submit" class="ui button">Submit</button>
@@ -87,44 +83,48 @@ class RegistrationForm {
   registrationForm: ControlGroup;
   name: AbstractControl;
   email: AbstractControl;
-  organizationNumber: AbstractControl;
-  numberOfEmployees: AbstractControl;
-  typeOfOrganization: AbstractControl;
+  organization: AbstractControl;
+  organizationType: AbstractControl;
   
   data: Object;
   loading: boolean;
   
-  organizationTypes: Array<string> = ['1','2'];
+  organizationTypes: Array<string> = ['ENK','AS'];
 
   constructor(fb: FormBuilder, public http: Http) {
     this.registrationForm = fb.group({
       'name':                   ['', Validators.compose([Validators.required])],
       'email':                  ['', Validators.compose([Validators.required])],
-      'organizationNumber':     ['', Validators.compose([Validators.required])],
-      'numberOfEmployees':      ['', Validators.compose([Validators.required])],
-      'typeOfOrganization':     ['', Validators.compose([Validators.required])]
+      'organization':           ['', Validators.compose([Validators.required])],
+      'organizationType':       ['', Validators.compose([Validators.required])]
     });
 
     this.name                   = this.registrationForm.controls['name'];
     this.email                  = this.registrationForm.controls['email'];
-    this.organizationNumber     = this.registrationForm.controls['organizationNumber'];
-    this.numberOfEmployees      = this.registrationForm.controls['numberOfEmployees'];
-    this.typeOfOrganization     = this.registrationForm.controls['typeOfOrganization']; 
+    this.organization           = this.registrationForm.controls['organization'];
+    this.organizationType       = this.registrationForm.controls['organizationType']; 
   }
   
   makePost(registrationRequest: Registration): void {
     console.log("request: ",registrationRequest);  
+    
+    const body = JSON.stringify(registrationRequest);
+    
+    let headers: Headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    
+    
+    let opts: RequestOptions = new RequestOptions();
+    opts.headers = headers;
+   
     this.loading = true;
+    
     this.http.post(
-      'http://www.mocky.io/v2/5185415ba171ea3a00704eed',
-      JSON.stringify({
-        body: 'bar',
-        title: 'foo',
-        userId: 1
-      }))
+      'https://hc2016-admin-backend.herokuapp.com/api/register',
+      body, opts)
       .subscribe((res: Response) => {
-        this.data = res.json();
         this.loading = false;
+        window.location.href='https://hc2016-pusher.herokuapp.com/';
       });
   }
 
