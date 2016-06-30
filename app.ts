@@ -1,4 +1,8 @@
 /* tslint:disable:no-string-literal */
+import 'zone.js/dist/zone';
+import 'reflect-metadata';
+import 'rxjs';
+
 import { bootstrap } from "@angular/platform-browser-dynamic"; 
 import { Component, OnInit } from "@angular/core";
 import {
