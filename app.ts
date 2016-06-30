@@ -124,7 +124,7 @@ class RegistrationForm {
       body, opts)
       .subscribe((res: Response) => {
         this.loading = false;
-        window.location.href='https://hc2016-pusher.herokuapp.com/';
+        window.location.href='https://hc2016-pusher.herokuapp.com?email=' + registrationRequest.email;
       });
   }
 
