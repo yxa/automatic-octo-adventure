@@ -93,10 +93,10 @@ class RegistrationForm {
 
   constructor(fb: FormBuilder, public http: Http) {
     this.registrationForm = fb.group({
-      'name':                   ['', Validators.compose([Validators.required])],
-      'email':                  ['', Validators.compose([Validators.required])],
-      'organization':           ['', Validators.compose([Validators.required])],
-      'organizationType':       ['', Validators.compose([Validators.required])]
+      'name':                   ['tester testersen', Validators.compose([Validators.required])],
+      'email':                  ['beep@boop.com', Validators.compose([Validators.required])],
+      'organization':           ['123456789', Validators.compose([Validators.required])],
+      'organizationType':       ['ENK', Validators.compose([Validators.required])]
     });
 
     this.name                   = this.registrationForm.controls['name'];
@@ -118,7 +118,7 @@ class RegistrationForm {
     opts.headers = headers;
    
     this.loading = true;
-    
+  
     this.http.post(
       'https://hc2016-admin-backend.herokuapp.com/api/register',
       body, opts)
