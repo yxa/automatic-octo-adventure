@@ -35,27 +35,33 @@ import {REDIRECT_URL} from './constants';
   directives: [CORE_DIRECTIVES, FORM_DIRECTIVES],
   template: `
   <div class="container">
-    <img src="http://piq.codeus.net/static/media/userpics/piq_45027_400x400.png" width="100px" height="100px" style="position: relative; left: -35px"/>
-    <h1>Oppstart og registrering</h1>
-    <form [ngFormModel]="registrationForm" (ngSubmit)="onSubmit(registrationForm.value)" class="stb-form-inline" role="form">
-        <div class="stb-form-group">
-            <label for="name">Navn</label>
-            <input type="text" id="name" [ngFormControl]="name">
-            
-            <label for="email">Epost</label>
-            <input type="text" id="email" placeholder="blah@blah.com" [ngFormControl]="email">
-            
-            <label for="organizationNumber">Organisasjonsnummer</label>
-            <input type="text" id="organizationNumber" placeholder="123456789" [ngFormControl]="organization">
-            
-             <label for="typeOfOrganization">Foretaksform</label>
-             <select [ngFormControl]="organizationType" id="typeOfOrganization"  class="form-control">
-                <option *ngFor="let type of organizationTypes; let i = index" [selected]="i == 0">{{type}}</option>
-             </select>
-             <br/>
-             <button type="submit" class="stb-btn stb-form">OK</button>
-        </div>
-    </form>
+    <div class="row stbcolor-secondary sixth top-padding-20">
+        <div class="col-md-12">
+            <img src="http://piq.codeus.net/static/media/userpics/piq_45027_400x400.png" width="100px" height="100px" style="position: relative; left: -35px"/>
+            <h1>Oppstart og registrering</h1>
+            <form [ngFormModel]="registrationForm" (ngSubmit)="onSubmit(registrationForm.value)" class="stb-form-inline" role="form">
+                <div class="stb-form-group">
+                    <label for="name">Navn</label>
+                    <input type="text" id="name" [ngFormControl]="name">
+                    
+                    <label for="email">Epost</label>
+                    <input type="text" id="email" placeholder="blah@blah.com" [ngFormControl]="email">
+                    
+                    <label for="organizationNumber">Organisasjonsnummer</label>
+                    <input type="text" id="organizationNumber" placeholder="123456789" [ngFormControl]="organization">
+                    
+                    <label for="typeOfOrganization">Foretaksform</label>
+                    <select [ngFormControl]="organizationType" id="typeOfOrganization"  class="form-control">
+                        <option *ngFor="let type of organizationTypes; let i = index" [selected]="i == 0">{{type}}</option>
+                    </select>
+                    <br/>
+                    <button type="submit" class="stb-btn stb-form">OK</button>
+                </div>
+             </form>
+          </div>   
+    </div>
+  
+    
   </div>
   `
 })
