@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import 'rxjs';
 
 import { bootstrap } from "@angular/platform-browser-dynamic"; 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, provide, Inject } from "@angular/core";
 import {
   CORE_DIRECTIVES,
   FORM_DIRECTIVES,
@@ -25,26 +25,9 @@ import {
 
 import { HTTP_PROVIDERS } from '@angular/http';
 
-function skuValidator(control: Control): { [s: string]: boolean } {
-  if (!control.value.match(/^123/)) {
-    return {invalidSku: true};
-  }
-}
-
-
-class Registration {
-  name: string;
-  email: string;
-  organization: string;
-  organizationType: string;
-  
-  constructor(obj?: any) {
-    this.name                   = obj && obj.name                   || null;
-    this.email                  = obj && obj.email                  || null;
-    this.organization           = obj && obj.organization           || null;
-    this.organizationType       = obj && obj.organizationType       || null;
-  }
-}
+import RegistrationService from './RegistrationService';
+import {Registration} from './Registration';
+import {REDIRECT_URL} from './constants';
 
 @Component({
   selector: 'registration-form',
@@ -84,11 +67,14 @@ class RegistrationForm {
   organizationType: AbstractControl;
   
   data: Object;
-  loading: boolean;
   
   organizationTypes: Array<string> = ['ENK','AS'];
-
-  constructor(fb: FormBuilder, public http: Http) {
+  
+  registrationService: RegistrationService;
+  
+  constructor(fb: FormBuilder, @Inject(RegistrationService) registrationService) {
+    this.registrationService = registrationService;
+    
     this.registrationForm = fb.group({
       'name':                   ['tester testersen', Validators.compose([Validators.required])],
       'email':                  ['beep@boop.com', Validators.compose([Validators.required])],
@@ -103,30 +89,14 @@ class RegistrationForm {
   }
   
   makePost(registrationRequest: Registration): void {
-    console.log("request: ",registrationRequest);  
-    
-    const body = JSON.stringify(registrationRequest);
-    
-    let headers: Headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    
-    
-    let opts: RequestOptions = new RequestOptions();
-    opts.headers = headers;
-   
-    this.loading = true;
-  
-    this.http.post(
-      'https://hc2016-admin-backend.herokuapp.com/api/register',
-      body, opts)
-      .subscribe((res: Response) => {
-        this.loading = false;
-        window.location.href='https://hc2016-pusher.herokuapp.com?email=' + registrationRequest.email;
+    this.registrationService.post(registrationRequest).subscribe((res: Response) => {
+        let params: string = [`email=${registrationRequest.email}`].join('&');
+        let queryUrl: string = `${REDIRECT_URL}?${params}`;
+        window.location.href = queryUrl;
       });
   }
-
+  
   onSubmit(value: any): void {
-    console.log('you submitted value: ', value);
     this.makePost(new Registration(value));
   }
 }
@@ -141,4 +111,4 @@ class App {
     }
 }
 
-bootstrap(App, [HTTP_PROVIDERS]);
+bootstrap(App, [HTTP_PROVIDERS, provide(RegistrationService, { useClass: RegistrationService })]);
