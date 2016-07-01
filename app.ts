@@ -48,34 +48,31 @@ class Registration {
 
 @Component({
   selector: 'registration-form',
-  
   pipes: [JsonPipe],
   directives: [CORE_DIRECTIVES, FORM_DIRECTIVES],
   template: `
-  <div class="ui raised segment">
-    <h2 class="ui header">Registration</h2>
-    <form [ngFormModel]="registrationForm" (ngSubmit)="onSubmit(registrationForm.value)" class="ui form">
-      <div class="field" [class.error]="!name.valid && name.touched">
-        <label for="name">Name</label>
-        <input type="text" id="name" placeholder="SKU" [ngFormControl]="name">
-        
-        <label for="email">Email</label>
-        <input type="text" id="email" placeholder="SKU" [ngFormControl]="email">
-        
-        <label for="organizationNumber">OrganizationNumber</label>
-        <input type="text" id="organizationNumber" placeholder="SKU" [ngFormControl]="organization">
-       
-        
-        <label for="typeOfOrganization">TypeOfOrganization</label>
-        <select [ngFormControl]="organizationType" id="typeOfOrganization">
-           <option *ngFor="let type of organizationTypes; let i = index" [selected]="i == 0">{{type}}</option>
-        </select>
-      </div>
-      <button type="submit" class="ui button">Submit</button>
+  <div class="container">
+    <img src="http://piq.codeus.net/static/media/userpics/piq_45027_400x400.png" width="100px" height="100px" style="position: relative; left: -35px"/>
+    <h1>Oppstart og registrering</h1>
+    <form [ngFormModel]="registrationForm" (ngSubmit)="onSubmit(registrationForm.value)" class="stb-form-inline" role="form">
+        <div class="stb-form-group">
+            <label for="name">Navn</label>
+            <input type="text" id="name" [ngFormControl]="name">
+            
+            <label for="email">Epost</label>
+            <input type="text" id="email" placeholder="blah@blah.com" [ngFormControl]="email">
+            
+            <label for="organizationNumber">Organisasjonsnummer</label>
+            <input type="text" id="organizationNumber" placeholder="123456789" [ngFormControl]="organization">
+            
+             <label for="typeOfOrganization">Foretaksform</label>
+             <select [ngFormControl]="organizationType" id="typeOfOrganization"  class="form-control">
+                <option *ngFor="let type of organizationTypes; let i = index" [selected]="i == 0">{{type}}</option>
+             </select>
+             <br/>
+             <button type="submit" class="stb-btn stb-form">OK</button>
+        </div>
     </form>
-    
-    <div *ngIf="loading">loading...</div>
-    <pre>{{data | json}}</pre>
   </div>
   `
 })
